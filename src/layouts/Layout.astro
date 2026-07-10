@@ -1,23 +1,198 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+---
+/**
+ * Layout.astro — Layout principal del sitio
+ *
+ * Estructura: header fijo minimal + <slot /> de contenido + footer "colofón".
+ * El footer cita los datos del "pliego" (rol, ubicación, año) como si fuera
+ * la ficha técnica impresa al pie de un impreso editorial.
+ */
+import '../styles/global.css';
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Cristóbal Ramos Merino — Desarrollador & creador interdisciplinario',
+  description = 'Software, música, escritura y producción audiovisual. Portafolio de Cristóbal Ramos Merino.',
+} = Astro.props;
+
+const year = new Date().getFullYear();
+
+const nav = [
+  { href: '#sobre-mi', label: 'Sobre mí' },
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#trabajos', label: 'Trabajos' },
+  { href: '#blog', label: 'Blog' },
+  { href: '#contacto', label: 'Contacto' },
+];
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header">
+      <div class="wrap site-header__inner">
+        <a href="/" class="brand" aria-label="Inicio">
+          <span class="brand__mark" aria-hidden="true">
+            <span class="registration-mark"><span class="ring"></span></span>
+          </span>
+          <span class="brand__name">C. Ramos Merino</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Navegación principal">
+          <ul>
+            {nav.map((item) => (
+              <li><a href={item.href}>{item.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <hr class="hairline" />
+      <div class="wrap site-footer__inner">
+        <div class="colophon">
+          <p class="eyebrow">Ficha técnica</p>
+          <p class="mono-meta">
+            Cristóbal Ramos Merino — Santiago, Chile<br />
+            Desarrollo de software · Música · Escritura · Audiovisual<br />
+            Impreso digitalmente © {year}
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <a class="btn btn--ghost" href="https://www.linkedin.com/in/crist%C3%B3bal-ignacio-ramos-merino-028b60a3/" target="_blank" rel="noopener noreferrer">
+            LinkedIn ↗
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <style>
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--ink);
+        color: var(--paper);
+        padding: 0.75em 1.2em;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        z-index: 100;
+      }
+      .skip-link:focus {
+        left: var(--space-3);
+        top: var(--space-2);
+      }
+
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(250, 249, 246, 0.86);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--line-faint);
+      }
+
+      .site-header__inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-block: var(--space-2);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 0.7em;
+      }
+
+      .brand__name {
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+        letter-spacing: 0.02em;
+      }
+
+      .site-nav ul {
+        list-style: none;
+        display: flex;
+        gap: var(--space-3);
+        margin: 0;
+        padding: 0;
+      }
+
+      .site-nav a {
+        font-family: var(--font-mono);
+        font-size: 0.82rem;
+        letter-spacing: 0.03em;
+        color: var(--ink-soft);
+        position: relative;
+        padding-bottom: 2px;
+      }
+
+      .site-nav a:hover {
+        color: var(--ink);
+      }
+
+      .site-nav a::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 0;
+        height: 1px;
+        background: var(--ink);
+        transition: width 0.2s ease;
+      }
+
+      .site-nav a:hover::after {
+        width: 100%;
+      }
+
+      @media (max-width: 720px) {
+        .site-nav ul {
+          gap: var(--space-2);
+        }
+        .site-nav a {
+          font-size: 0.74rem;
+        }
+        .brand__name {
+          font-size: 0.78rem;
+        }
+      }
+
+      .site-footer {
+        margin-top: var(--space-6);
+      }
+
+      .site-footer__inner {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: var(--space-3);
+        padding-block: var(--space-4);
+      }
+
+      .colophon p + p {
+        margin-top: var(--space-1);
+      }
+    </style>
+  </body>
+</html>

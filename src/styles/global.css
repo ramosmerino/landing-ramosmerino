@@ -1,0 +1,243 @@
+/* ==========================================================================
+   Sistema de diseño — "Pliego de registro"
+   Metáfora: hoja de imprenta con planchas CMYK ligeramente desregistradas
+   sobre una base tipográfica negra. Sobrio, editorial, técnico.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Color */
+  --ink: #121212;
+  --ink-soft: #3a3a3a;
+  --paper: #faf9f6;
+  --paper-dim: #f1f0eb;
+  --line: #1f1f1f;
+  --line-faint: rgba(18, 18, 18, 0.14);
+
+  /* CMYK pasteles — uno por disciplina */
+  --cyan: #b9e4e1;     /* software */
+  --magenta: #f4c9d6;  /* música */
+  --yellow: #f3e7a8;   /* escritura */
+  --key: #121212;      /* "K" — la base negra */
+
+  /* Tipografía */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'IBM Plex Sans', -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  /* Escala */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.75rem;
+  --space-4: 3rem;
+  --space-5: 5rem;
+  --space-6: 8rem;
+
+  --maxw: 1180px;
+  --radius: 2px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--cyan);
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img { max-width: 100%; display: block; }
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+p { margin: 0; }
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--space-3);
+}
+
+/* ---- Utilidades tipográficas ---- */
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.mono-meta {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+/* ---- Marca de registro (cruz de imprenta) ----
+   Firma visual del sitio: aparece en aperturas de sección,
+   como las marcas de corte/registro en un pliego offset. */
+
+.registration-mark {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.registration-mark::before,
+.registration-mark::after {
+  content: '';
+  position: absolute;
+  background: var(--ink);
+}
+
+.registration-mark::before {
+  top: 50%; left: 0;
+  width: 100%; height: 1px;
+  transform: translateY(-50%);
+}
+
+.registration-mark::after {
+  left: 50%; top: 0;
+  height: 100%; width: 1px;
+  transform: translateX(-50%);
+}
+
+.registration-mark .ring {
+  position: absolute;
+  inset: 3px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+}
+
+/* ---- Texto desregistrado (solo para el nombre en el hero) ---- */
+
+.misregistered {
+  position: relative;
+  display: inline-block;
+  color: var(--ink);
+}
+
+.misregistered::before,
+.misregistered::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%;
+  z-index: -1;
+  user-select: none;
+}
+
+.misregistered::before {
+  color: var(--cyan);
+  transform: translate(3px, 2px);
+}
+
+.misregistered::after {
+  color: var(--magenta);
+  transform: translate(-3px, -2px);
+}
+
+/* ---- Etiquetas de disciplina ---- */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3em 0.7em;
+  border: 1px solid var(--line-faint);
+  border-radius: 100px;
+}
+
+.tag::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--swatch, var(--ink));
+}
+
+.tag--software { --swatch: var(--cyan); }
+.tag--musica   { --swatch: var(--magenta); }
+.tag--escritura{ --swatch: var(--yellow); }
+
+/* ---- Reglas / divisores ---- */
+
+.hairline {
+  border: none;
+  border-top: 1px solid var(--line-faint);
+  margin: 0;
+}
+
+/* ---- Botones / enlaces de acción ---- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  padding: 0.85em 1.4em;
+  border: 1px solid var(--ink);
+  border-radius: var(--radius);
+  background: transparent;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn--ghost {
+  border-color: var(--line-faint);
+}
+
+.btn--ghost:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
