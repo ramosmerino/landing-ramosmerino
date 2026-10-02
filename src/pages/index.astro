@@ -1,400 +1,148 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Hero from "@/components/Hero.astro";
+import Layout from "@/layouts/HomeLayout.astro";
 
-const proyectos = [
-  {
-    categoria: 'software',
-    label: 'Software',
-    titulo: 'zeus-scraper-transparencia',
-    desc: 'Scraper en TypeScript sobre Playwright para el Portal de Transparencia de Chile, integrado al sistema Olimpo/Zeus.',
-    anio: '2025–2026',
-  },
-  {
-    categoria: 'musica',
-    label: 'Música',
-    titulo: 'Proyecto IO',
-    desc: 'Banda de rock progresivo experimental. Set en vivo con ruteo MIDI, DMX y video sincronizados en torno a Reaper.',
-    anio: '2025—',
-  },
-  {
-    categoria: 'escritura',
-    label: 'Escritura',
-    titulo: 'Crónica del bingo comunitario',
-    desc: 'Reconstrucción periodística de un evento comunitario a partir de entrevistas en terreno.',
-    anio: '2026',
-  },
-  {
-    categoria: 'software',
-    label: 'Software',
-    titulo: 'ReaUnrealCues',
-    desc: 'Script en Lua para Reaper que genera cues de audio vía la API de Unreal Speech, para señalización en vivo.',
-    anio: '2025',
-  },
-];
 
-const trabajos = [
-  {
-    titulo: 'Sistema de presentación en vivo — Proyecto IO',
-    rol: 'Diseño técnico e implementación',
-    detalle:
-      'Arquitectura de show en vivo que integra Reaper, Resolume, Sunlite DMX, OBS y MIDI con el computador como hub central, incluyendo mapa de tempo para rallentandos y cues de voz automatizados.',
-  },
-  {
-    titulo: 'The Wailing of The Angels: The Children of Donbas',
-    rol: 'Traducción y diagramación editorial',
-    detalle:
-      'Maquetación bilingüe en InDesign, resolución de marcos de texto encadenados y mapeo de estilos de párrafo para publicación en Amazon KDP.',
-  },
-  {
-    titulo: 'FileAnalyzer.ps1',
-    rol: 'Desarrollo de utilidad CLI',
-    detalle:
-      'Herramienta en PowerShell para analizar grupos de archivos con nombres entre corchetes y timestamps epoch, con manejo correcto de rutas Unicode.',
-  },
-];
+const title = "cristóbal ramos merino | arquitectx de software";
+const description =
+"diseño y desarollo de sistemas, especialización en crear experiencias web modernas y accesibles.";
 
-const blog = [
-  { titulo: 'Notas sobre desregistro: por qué este sitio se ve así', fecha: '2026' },
-  { titulo: 'Montar un show en vivo con Reaper como centro de control', fecha: '2026' },
-  { titulo: 'Apuntes de una crónica en construcción', fecha: '2026' },
-];
+
 ---
 
-<Layout>
-  <!-- ============ HERO ============ -->
-  <section class="hero">
-    <div class="wrap hero__inner">
-      <p class="eyebrow hero__eyebrow">
-        <span class="registration-mark"><span class="ring"></span></span>
-        Pliego 01 — Portada
-      </p>
-      <h1 class="hero__name">
-        <span class="misregistered" data-text="(cristóbal) Ramos Merino">(cristóbal) Ramos Merino</span>
-      </h1>
-      <p class="hero__role">desarrollo de software · creadorx interdisciplinarix</p>
-      <p class="hero__desc">
-        Diseño y construyo soluciones consisas a problemas complejos.
-        Arquitectura de software, livecoding, electrónica, sistemas
-        son puestos al servicio de proyectos musicales,
-        editoriales y audiovisuales.
-      </p>
-      <div class="hero__tags">
-        <span class="tag tag--software">Software</span>
-        <span class="tag tag--musica">Música</span>
-        <span class="tag tag--escritura">Escritura</span>
-      </div>
-    </div>
-  </section>
-
-  <hr class="hairline" />
-
-  <!-- ============ SOBRE MÍ ============ -->
-  <section id="sobre-mi" class="section">
-    <div class="wrap section__inner section__inner--split">
-      <div class="section__head">
-        <span class="registration-mark"><span class="ring"></span></span>
-        <p class="eyebrow">Sobre mí</p>
-      </div>
-      <div class="section__body">
-        <p class="lede">
-          Trabajo de forma independiente en desarrollo de software
-          y práctica creativa. Diseño y construyo herramientas a medida —de scrapers de
-          datos públicos a sistemas de cues para escenario— y las aplico directamente en
-          mis proyectos de música, escritura y producción audiovisual.
-        </p>
-        <p>
-          Además de mi práctica individual, soy editor en Editorial Hiperstición y diseñador de software en Globant. Vivo y trabajo en Santiago, Chile.
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <hr class="hairline" />
-
-  <!-- ============ PROYECTOS ============ -->
-  <section id="proyectos" class="section">
-    <div class="wrap">
-      <div class="section__head">
-        <span class="registration-mark"><span class="ring"></span></span>
-        <p class="eyebrow">Proyectos</p>
-      </div>
-
-      <div class="grid">
-        {proyectos.map((p) => (
-          <article class="card">
-            <div class="card__top">
-              <span class={`tag tag--${p.categoria}`}>{p.label}</span>
-              <span class="mono-meta">{p.anio}</span>
-            </div>
-            <h3 class="card__title">{p.titulo}</h3>
-            <p class="card__desc">{p.desc}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <hr class="hairline" />
-
-  <!-- ============ TRABAJOS SELECCIONADOS ============ -->
-  <section id="trabajos" class="section">
-    <div class="wrap">
-      <div class="section__head">
-        <span class="registration-mark"><span class="ring"></span></span>
-        <p class="eyebrow">Trabajos seleccionados</p>
-      </div>
-
-      <ul class="worklist">
-        {trabajos.map((t) => (
-          <li class="worklist__item">
-            <p class="mono-meta worklist__rol">{t.rol}</p>
-            <h3 class="worklist__title">{t.titulo}</h3>
-            <p class="worklist__detalle">{t.detalle}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <hr class="hairline" />
-
-  <!-- ============ BLOG ============ -->
-  <section id="blog" class="section">
-    <div class="wrap">
-      <div class="section__head">
-        <span class="registration-mark"><span class="ring"></span></span>
-        <p class="eyebrow">Blog</p>
-      </div>
-
-      <ul class="bloglist">
-        {blog.map((entrada) => (
-          <li class="bloglist__item">
-            <a href="#" class="bloglist__link">
-              <span class="bloglist__titulo">{entrada.titulo}</span>
-              <span class="mono-meta">{entrada.fecha}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <hr class="hairline" />
-
-  <!-- ============ CONTACTO ============ -->
-  <section id="contacto" class="section section--contact">
-    <div class="wrap section__inner section__inner--split">
-      <div class="section__head">
-        <span class="registration-mark"><span class="ring"></span></span>
-        <p class="eyebrow">Contacto</p>
-      </div>
-      <div class="section__body">
-        <p class="lede">
-          ¿Tienes un proyecto en mente o quieres conversar? Escríbeme.
-        </p>
-        <div class="contact__actions">
-          <a class="btn" href="mailto:contacto@cristobalramos.com">Escribir un correo</a>
-          <a class="btn btn--ghost" href="https://www.linkedin.com/in/crist%C3%B3bal-ignacio-ramos-merino-028b60a3/" target="_blank" rel="noopener noreferrer">
-            LinkedIn ↗
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
+<Layout title={title} description={description}>
+  <Hero />
 </Layout>
 
 <style>
-  /* ---- Hero ---- */
-  .hero {
-    padding-block: var(--space-6) var(--space-5);
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
   }
-
-  .hero__eyebrow {
-    display: flex;
-    align-items: center;
-    gap: 0.6em;
-    margin-bottom: var(--space-3);
+  
+  ::-webkit-scrollbar-track {
+    background: var(--color-bg);
   }
-
-  .hero__name {
-    font-size: clamp(2.6rem, 7vw, 5.2rem);
-    line-height: 1.02;
-    margin-bottom: var(--space-2);
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 4px;
   }
-
-  .hero__role {
-    font-family: var(--font-mono);
-    font-size: 1rem;
-    color: var(--ink-soft);
-    margin-bottom: var(--space-3);
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-hover);
   }
-
-  .hero__desc {
-    max-width: 46ch;
-    font-size: 1.1rem;
-    color: var(--ink-soft);
-    margin-bottom: var(--space-3);
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
   }
-
-  .hero__tags {
-    display: flex;
-    gap: var(--space-1);
-    flex-wrap: wrap;
+  
+  /* Section transitions */
+  section {
+    scroll-margin-top: 6rem;
   }
-
-  /* ---- Secciones genéricas ---- */
-  .section {
-    padding-block: var(--space-5);
+  
+  /* Custom underline effect */
+  .underline-effect {
+    position: relative;
+    display: inline-block;
   }
-
-  .section__head {
-    display: flex;
-    align-items: center;
-    gap: 0.6em;
-    margin-bottom: var(--space-3);
+  
+  .underline-effect::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: var(--color-primary);
+    transition: width 0.3s ease;
   }
-
-  .section__inner--split {
-    display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: var(--space-4);
+  
+  .underline-effect:hover::after {
+    width: 100%;
   }
-
-  .section__body {
-    max-width: 62ch;
+  
+  /* Animation for hero section */
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
   }
-
-  .lede {
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    line-height: 1.4;
-    margin-bottom: var(--space-2);
+  
+  .floating {
+    animation: float 6s ease-in-out infinite;
   }
-
-  .section__body p + p {
-    margin-top: var(--space-2);
-    color: var(--ink-soft);
-  }
-
-  @media (max-width: 760px) {
-    .section__inner--split {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* ---- Grid de proyectos ---- */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1px;
-    background: var(--line-faint);
-    border: 1px solid var(--line-faint);
-  }
-
-  .card {
-    background: var(--paper);
-    padding: var(--space-3);
-    transition: background 0.2s ease;
-  }
-
-  .card:hover {
-    background: var(--paper-dim);
-  }
-
-  .card__top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-2);
-  }
-
-  .card__title {
-    font-size: 1.4rem;
-    margin-bottom: 0.5em;
-  }
-
-  .card__desc {
-    color: var(--ink-soft);
-    font-size: 0.95rem;
-  }
-
-  @media (max-width: 640px) {
-    .grid { grid-template-columns: 1fr; }
-  }
-
-  /* ---- Lista de trabajos ---- */
-  .worklist {
-    list-style: none;
+  
+  body {
     margin: 0;
-    padding: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: var(--color-bg);
+    color: var(--color-foreground);
   }
 
-  .worklist__item {
-    padding-block: var(--space-3);
-    border-top: 1px solid var(--line-faint);
+  header {
+    text-align: center;
+    padding: 2rem;
+    background: var(--color-surface);
   }
 
-  .worklist__item:last-child {
-    border-bottom: 1px solid var(--line-faint);
+  .profile-img {
+    width: 100px;
+    height: 100px;
+    background: var(--color-gray);
+    border-radius: 50%;
+    margin: auto;
   }
 
-  .worklist__rol {
-    margin-bottom: 0.4em;
+  section {
+    padding: 2rem;
+    max-width: 800px;
+    margin: auto;
   }
 
-  .worklist__title {
-    font-size: 1.6rem;
-    margin-bottom: 0.4em;
-  }
-
-  .worklist__detalle {
-    max-width: 64ch;
-    color: var(--ink-soft);
-  }
-
-  /* ---- Blog ---- */
-  .bloglist {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .bloglist__item {
-    border-top: 1px solid var(--line-faint);
-  }
-
-  .bloglist__item:last-child {
-    border-bottom: 1px solid var(--line-faint);
-  }
-
-  .bloglist__link {
+  .skills {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding-block: var(--space-2);
-    transition: padding-left 0.18s ease, color 0.18s ease;
-  }
-
-  .bloglist__link:hover {
-    padding-left: 0.6em;
-    color: var(--ink-soft);
-  }
-
-  .bloglist__titulo {
-    font-family: var(--font-display);
-    font-size: 1.25rem;
-  }
-
-  /* ---- Contacto ---- */
-  .section--contact {
-    padding-bottom: var(--space-6);
-  }
-
-  .contact__actions {
-    display: flex;
-    gap: var(--space-2);
     flex-wrap: wrap;
-    margin-top: var(--space-3);
+    gap: 1rem;
   }
+
+  .skills li {
+    background: var(--color-surface-muted);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    list-style: none;
+  }
+
+  .portfolio-item {
+    background: var(--color-surface-raised);
+    padding: 1rem;
+    margin: 1rem 0;
+    border-left: 5px solid var(--color-accent);
+  }
+
+	form input,
+	form textarea {
+		width: 100%;
+		margin-bottom: 1rem;
+		padding: 0.5rem;
+		background: var(--color-input);
+		border: none;
+		color: var(--color-white);
+	}
+
+	form button {
+		padding: 0.75rem 1.5rem;
+		background: var(--color-accent);
+		color: var(--color-white);
+		border: none;
+		cursor: pointer;
+	}
+
+	footer {
+		text-align: center;
+		padding: 1rem;
+		background: var(--color-surface);
+	}
 </style>

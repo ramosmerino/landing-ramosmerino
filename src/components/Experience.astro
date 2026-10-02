@@ -1,0 +1,184 @@
+---
+const experiences = [
+  {
+    role: 'Arquitecto de Software',
+    company: 'Proyecto Olimpo',
+    period: '2020 – Presente',
+    description: 'Lideré el diseño e implementación de arquitecturas de software escalables y mantenibles para aplicaciones empresariales de alto tráfico.',
+    skills: ['Arquitectura de Software', 'Microservicios', 'AWS', 'Kubernetes', 'Node.js'],
+    type: 'Tiempo completo'
+  },
+  {
+    role: 'Desarrollador Backend Senior',
+    company: 'Varias Startups',
+    period: '2015 – 2020',
+    description: 'Desarrollé y mantuve APIs robustas y escalables para múltiples startups en etapa temprana, colaborando estrechamente con equipos multidisciplinarios.',
+    skills: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'REST APIs'],
+    type: 'Freelance'
+  },
+  {
+    role: 'Desarrollador Full Stack',
+    company: 'Agencia Digital',
+    period: '2012 – 2015',
+    description: 'Construí y mantuve aplicaciones web completas, desde el frontend hasta la base de datos, para diversos clientes de la agencia.',
+    skills: ['JavaScript', 'PHP', 'MySQL', 'jQuery', 'WordPress'],
+    type: 'Tiempo completo'
+  }
+];
+---
+<section id="experience" class="relative py-16 z-10">
+  <div class="absolute inset-0 -z-10 pointer-events-none">
+    <canvas id="bg-canvas-experience" class="sticky top-0 w-full h-full"></canvas>
+  </div>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 bg-[var(--color-black)]">
+    <h2 class="text-3xl font-bold text-center mb-12">
+      <span class="relative inline-block">
+        Experiencia
+        <span class="absolute bottom-0 left-0 w-full h-1 bg-primary/30 -z-10 transform translate-y-1"></span>
+      </span>
+    </h2>
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 bg-[var(--color-black)]">
+  
+
+  <div class="relative">
+    <!-- Timeline line -->
+    <div class="absolute left-4 md:left-1/2 h-full w-0.5 bg-gradient-to-b from-primary/20 to-transparent"></div>
+    
+    <div class="space-y-12">
+      {experiences.map((exp, index) => (
+        <div class="relative flex flex-col md:flex-row items-start group">
+          <!-- Timeline dot -->
+          <div class={`
+            absolute left-0 md:left-1/2 w-8 h-8 rounded-full flex items-center justify-center
+            bg-primary/10 border-2 border-primary transform -translate-x-1/2 md:-translate-x-1/2
+            z-10 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary/20
+            ${index === 0 ? 'mt-1' : ''}
+          `}>
+            <div class="w-2 h-2 rounded-full bg-primary"></div>
+          </div>
+          
+          <!-- Content -->
+          <div class={`
+            w-full md:w-5/12 pb-12 md:pb-16 relative
+            ${index % 2 === 0 ? 'md:pr-8 md:text-right' : 'md:pl-8 md:ml-auto'}
+          `}>
+            <div class="md:hidden mb-2">
+              <span class="inline-block px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
+                {exp.type}
+              </span>
+            </div>
+            <h3 class="text-xl font-bold text-text">{exp.role}</h3>
+            <p class="text-lg font-medium text-primary">{exp.company}</p>
+            <p class="text-sm text-text-muted mb-3">{exp.period}</p>
+            <p class="text-text/90 mb-4">{exp.description}</p>
+            
+            <div class="flex flex-wrap gap-2">
+              {exp.skills.map(skill => (
+                <span class="text-xs px-2 py-1 rounded-full bg-bg-secondary text-text-muted border border-border/20">
+                  {skill}
+                </span>
+              ))}
+            </div>
+            
+            {/* Type badge for desktop */}
+            <div class="hidden md:block absolute -bottom-2 right-0">
+              <span class="inline-block px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary">
+                {exp.type}
+              </span>
+            </div>
+          </div>
+          
+          {/* Spacer for alternating layout */}
+          <div class={`hidden md:block ${index % 2 === 0 ? 'md:w-5/12' : 'w-0'}`}></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+</div>
+</section>
+
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>("#bg-canvas-experience")!;
+  const ctx = canvas.getContext("2d");
+
+  let width: number, height: number, cols: number, rows: number, resolution: number;
+  let grid: number[][];
+  let angle = 0;
+  let lastScrollY = window.scrollY;
+  const fps = 24;
+
+  function init() {
+    resolution = 40;
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    cols = Math.floor(width / resolution);
+    rows = Math.floor(height / resolution);
+    grid = Array.from({ length: cols }, () =>
+      Array.from({ length: rows }, () => 1)
+    );
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--color-white").trim();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "20px monospace";
+
+    for (let x = 0; x < cols; x++) {
+      for (let y = 0; y < rows; y++) {
+        if (grid[x][y] === 1) {
+          const px = x * resolution + resolution / 2;
+          const py = y * resolution + resolution / 2;
+
+          ctx.save();
+          ctx.translate(px, py);
+          ctx.rotate(angle);
+          ctx.fillText("-", 0, 0);
+          ctx.restore();
+        }
+      }
+    }
+  }
+
+  function update() {
+    // No lógica de vida aquí, solo fondo animado
+  }
+
+  function loop() {
+    update();
+    draw();
+    setTimeout(() => {
+        loop();
+    }, 1000 / fps);
+  }
+
+  function handleScroll() {
+    const currentScrollY = window.scrollY;
+    const delta = currentScrollY - lastScrollY;
+
+    angle += delta > 0 ? -0.1 : 0.1;
+    lastScrollY = currentScrollY;
+  }
+
+  function handleMouseMove(event: { clientX: number; clientY: number; }) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+    const cellX = Math.floor(mouseX / resolution);
+    const cellY = Math.floor(mouseY / resolution);
+
+    if (cellX >= 0 && cellX < cols && cellY >= 0 && cellY < rows) {
+      grid[cellX][cellY] = grid[cellX][cellY] === 1 ? 0 : 1;
+    }
+  }
+
+  init();
+  loop();
+
+  window.addEventListener("resize", init);
+  window.addEventListener("scroll", handleScroll);
+  canvas.addEventListener("mousemove", handleMouseMove);
+</script>

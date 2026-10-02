@@ -1,0 +1,358 @@
+<section
+  id="hero"
+  class="relative h-screen w-full flex items-center justify-center overflow-hidden"
+>
+  <canvas id="life-canvas" class="fixed inset-0 w-full h-full z-0"></canvas>
+
+  <div class="container mx-auto px-4 text-center z-10 pointer-events-none">
+    <h1
+      class="text-5xl md:text-6xl lg:text-7xl font-bold uppercase tracking-wider"
+    >
+        <span class="line">Design</span> <span class="line font-serif italic lowercase mx-10">and</span> <span class="line">Data</span> <br/> <span class="line">Systems</span>
+    </h1>
+  </div>
+
+  <a
+    href="mailto:cristobalramosmerino@gmail.com"
+    class="contact fixed bottom-8 right-8 z-20 px-6 py-3 pointer-events-auto"
+  >
+    Contacto
+  </a>
+</section>
+
+<style>
+  h1 {
+    font-size: 15rem;
+    text-align: left;
+    line-height: 0.8;
+    font-weight: 500;
+    letter-spacing: -20px;
+    font-variant-ligatures: common-ligatures discretionary-ligatures
+      historical-ligatures contextual;
+    text-transform: uppercase;
+    filter: (100%);
+  }
+
+  .contact {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    font-family: inherit;
+    font-weight: 500;
+    text-transform: lowercase;
+    font-size: 0.875rem;
+    text-decoration: none;
+    border: none;
+  }
+
+  @media (max-width: 767px) {
+    h1 {
+      letter-spacing: -0.04em;
+      white-space: nowrap;
+    }
+
+    h1 br {
+      display: none;
+    }
+
+    h1 .line {
+      display: block;
+      width: fit-content;
+      margin: 0;
+    }
+  }
+
+  #hero {
+    color: var(--color-text);
+  }
+
+  canvas {
+    image-rendering: pixelated;
+    background-color: var(--color-bg);
+    opacity: 0.4;
+  }
+</style>
+
+<script>
+  const canvas = document.querySelector<HTMLCanvasElement>("#life-canvas")!;
+  const ctx = canvas.getContext("2d");
+
+  const rootStyle = getComputedStyle(document.documentElement);
+  const bg = rootStyle.getPropertyValue("--color-bg").trim();
+  const fg = rootStyle.getPropertyValue("--color-white").trim();
+  let width: number,
+    height: number,
+    cols: number,
+    rows: number,
+    resolution: number,
+    grid: any[], 
+    next: any[],
+    willDie: boolean[][],
+    lastScrollY: number = window.scrollY;
+  const fps = 24;
+  const dimAlpha = 0.35;
+
+  function init() {
+    resolution = 5;
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    cols = Math.floor(width / resolution);
+    rows = Math.floor(height / resolution);
+
+    grid = new Array(cols)
+      .fill(0)
+      .map((v, i) =>
+        // {
+        //   const paintCol = Math.floor(Math.random() * 2);
+        //   return new Array(rows).fill(0).map(() => paintCol);
+        // }
+        new Array(rows).fill(0).map(() => 0)
+      );
+  }
+
+  function glitch(x: number, y: number, size: any) {
+    ctx.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.2)`;
+    ctx.fillRect(x, y, size, size);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.globalAlpha = 1;
+    for (let x = 0; x < cols; x++) {
+      for (let y = 0; y < rows; y++) {
+        if (grid[x][y] === 1) {
+          // Las celdas a punto de morir brillan más que el resto
+          ctx.globalAlpha = willDie[x][y] ? 1 : dimAlpha;
+          ctx.fillStyle = fg;
+          ctx.fillRect(x * resolution, y * resolution, resolution, resolution);
+          if (Math.random() > 0.95)
+            glitch(x * resolution, y * resolution, resolution);
+        } else {
+          ctx.fillStyle = bg;
+          }
+      }
+    }
+  }
+
+  function update() {
+    next = grid.map((arr: any) => [...arr]);
+    willDie = grid.map((arr: any) => arr.map(() => false));
+
+    for (let x = 0; x < cols; x++) {
+      for (let y = 0; y < rows; y++) {
+        const cell = grid[x][y];
+        let neighbors = 0;
+
+        for (let i = -1; i <= 1; i++) {
+          for (let j = -1; j <= 1; j++) {
+            if (i === 0 && j === 0) continue;
+            const col = (x + i + cols) % cols;
+            const row = (y + j + rows) % rows;
+            neighbors += grid[col][row];
+          }
+        }
+
+        if (cell === 1 && (neighbors < 2 || neighbors > 3)) {
+          next[x][y] = 0;
+          willDie[x][y] = true;
+        } else if (cell === 0 && neighbors === 3) next[x][y] = 1;
+      }
+    }
+  }
+
+  // Onda tipo gota: anillos concéntricos que siembran celdas desde el centro
+  let rippleRadius = -1;
+  const rippleSpeed = 1.5;
+  const rippleRings = [0, 14, 28];
+
+  function startRipple() {
+    rippleRadius = 0;
+  }
+
+  function stepRipple() {
+    if (rippleRadius < 0) return;
+    const cx = cols / 2;
+    const cy = rows / 2;
+    const maxRadius = Math.hypot(cx, cy) + rippleRings[rippleRings.length - 1];
+
+    rippleRings.forEach((offset, ring) => {
+      const radius = rippleRadius - offset;
+      if (radius <= 0) return;
+      const density = 0.7 - ring * 0.15;
+      const x0 = Math.max(0, Math.floor(cx - radius - 2));
+      const x1 = Math.min(cols - 1, Math.ceil(cx + radius + 2));
+      for (let x = x0; x <= x1; x++) {
+        for (let y = 0; y < rows; y++) {
+          const dist = Math.hypot(x - cx, y - cy);
+          if (Math.abs(dist - radius) < 1.5 && Math.random() < density) grid[x][y] = 1;
+        }
+      }
+    });
+
+    rippleRadius += rippleSpeed;
+    if (rippleRadius > maxRadius) rippleRadius = -1;
+  }
+
+  // Acelerómetro: los píxeles se desplazan con el movimiento del dispositivo
+  const motionGain = 0.8; // celdas por m/s² de cambio en la aceleración
+  const motionMaxStep = 6; // máximo de celdas por frame
+  let motionEnabled = false;
+  let lastAccel: { x: number; y: number } | null = null;
+  let driftX = 0;
+  let driftY = 0;
+
+  function shiftGrid(dx: number, dy: number) {
+    next = grid.map((col: number[], x: number) =>
+      col.map(
+        (_: number, y: number) =>
+          grid[(((x - dx) % cols) + cols) % cols][(((y - dy) % rows) + rows) % rows]
+      )
+    );
+    grid = next;
+  }
+
+  function handleMotion(event: DeviceMotionEvent) {
+    const a = event.accelerationIncludingGravity;
+    if (!a || a.x == null || a.y == null) return;
+    // iOS reporta los ejes con signo opuesto al de Android
+    const sign = typeof (DeviceMotionEvent as any).requestPermission === "function" ? -1 : 1;
+    if (lastAccel) {
+      driftX += -sign * (a.x - lastAccel.x) * motionGain;
+      driftY += sign * (a.y - lastAccel.y) * motionGain;
+    }
+    lastAccel = { x: a.x, y: a.y };
+  }
+
+  function applyMotion() {
+    const clamp = (v: number) => Math.max(-motionMaxStep, Math.min(motionMaxStep, v));
+    const stepX = clamp(Math.trunc(driftX));
+    const stepY = clamp(Math.trunc(driftY));
+    if (stepX !== 0 || stepY !== 0) shiftGrid(stepX, stepY);
+    driftX = (driftX - Math.trunc(driftX)) * 0.8;
+    driftY = (driftY - Math.trunc(driftY)) * 0.8;
+  }
+
+  async function enableMotion() {
+    if (motionEnabled || typeof DeviceMotionEvent === "undefined") return;
+    const requestPermission = (DeviceMotionEvent as any).requestPermission;
+    if (typeof requestPermission === "function") {
+      try {
+        // iOS exige pedir permiso dentro de un gesto del usuario
+        if ((await requestPermission.call(DeviceMotionEvent)) !== "granted") return;
+      } catch {
+        return;
+      }
+    }
+    motionEnabled = true;
+    window.addEventListener("devicemotion", handleMotion);
+  }
+
+  function loop() {
+    applyMotion();
+    stepRipple();
+    update();
+    draw();
+    grid = next;
+    setTimeout(() => {
+        loop();
+    }, 1000 / fps);
+  }
+
+  function handleMouseMove(event: { clientX: number; clientY: number }) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    const cellX = Math.floor(mouseX / resolution);
+    const cellY = Math.floor(mouseY / resolution);
+
+    if (cellX >= 0 && cellX < cols && cellY >= 0 && cellY < rows) {
+      if(grid[cellX][cellY] === 1) {
+        grid[cellX][cellY] = 0;
+      }
+      else { 
+        grid[cellX][cellY] = 1;
+        grid[cellX][cellY+1] = 1;
+        grid[cellX][cellY-1] = 1;
+      }
+    }
+  }
+
+ 
+
+  function handleScroll() {
+    const currentScrollY = window.scrollY;
+    const delta = currentScrollY - lastScrollY;
+    const sign = delta > 0 ? 1 : -1;
+    next = grid.map((arr: any) => [...arr]);
+    for (let x = 0; x < cols; x++) {
+      for (let y = 0; y < rows; y++) {
+        if(grid[x][y] === 1) {
+          next[x][y+sign] = delta > 0 ? 1 : 0;
+        }
+      }
+    }
+    grid = next;
+    lastScrollY = currentScrollY;
+  }  
+
+  function handleClick(event: { clientX: number; clientY: number }) {
+    enableMotion();
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    const cellX = Math.floor(mouseX / resolution);
+    const cellY = Math.floor(mouseY / resolution);
+
+    for(let i = 0; i < grid[cellX].length; i++) {
+      grid[cellX][i] = 1;
+      grid[cellX][Math.min(i+1, grid.length)] = 1;
+      grid[cellX][Math.min(i+2,  grid.length)] = 1;
+    }
+    for (let i = 0; i < grid.length; i++) {
+      grid[i][cellY] = 1;
+      grid[Math.min(i+2, grid[cellX].length)][cellY] = 1;
+    }
+  }
+
+  // Móvil: cada palabra en su línea, con un tamaño que ocupa todo el ancho
+  const heroTitle = document.querySelector<HTMLElement>("h1")!;
+  const mobileQuery = window.matchMedia("(max-width: 767px)");
+
+  const mobileScale = 0.9; // 10% más pequeño que el ancho completo
+
+  function fitLines() {
+    const lines = heroTitle.querySelectorAll<HTMLElement>(".line");
+    if (!mobileQuery.matches) {
+      lines.forEach((line) => line.style.removeProperty("font-size"));
+      return;
+    }
+    const available = heroTitle.clientWidth;
+    lines.forEach((line) => {
+      line.style.fontSize = "100px";
+      const measured = line.getBoundingClientRect().width;
+      line.style.fontSize = `${(100 * available * mobileScale) / measured}px`;
+    });
+  }
+
+  fitLines();
+  document.fonts.ready.then(fitLines);
+  window.addEventListener("resize", fitLines);
+
+  if (
+    typeof DeviceMotionEvent !== "undefined" &&
+    typeof (DeviceMotionEvent as any).requestPermission !== "function"
+  )
+    enableMotion();
+
+  init();
+  startRipple();
+  loop();
+  window.addEventListener("resize", () => {
+    init();
+    startRipple();
+  });
+  window.addEventListener("mousemove", handleMouseMove);
+  window.addEventListener("click", handleClick);
+  window.addEventListener("scroll", handleScroll);
+</script>

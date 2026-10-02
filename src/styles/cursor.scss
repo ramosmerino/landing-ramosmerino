@@ -1,0 +1,36 @@
+html * {
+  cursor: url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='0' y='6' width='15' height='3' fill='%23ED1E79'/><rect x='6' y='0' width='3' height='15' fill='%23ED1E79'/></svg>") 7.5 7.5, auto !important;
+}
+
+a, button, [role="button"], input, textarea, select, label[for] {
+  &, & * {
+    cursor: url("data:image/svg+xml;utf8,<svg width='15' height='15' viewBox='0 0 15 15' fill='none' xmlns='http://www.w3.org/2000/svg' class='rotate'><rect x='0' y='6' width='15' height='3' fill='%23ED1E79'/><rect x='6' y='0' width='3' height='15' fill='%23ED1E79'/></svg>") 7.5 7.5, pointer !important;
+  }
+}
+
+[disabled], [aria-disabled="true"] {
+  &, & * {
+    cursor: not-allowed !important;
+  }
+}
+
+@keyframes rotateCursor {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate {
+  animation: rotateCursor 0.3s ease-out;
+  transform-origin: center;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  html * {
+    cursor: default !important;
+  }
+}
+

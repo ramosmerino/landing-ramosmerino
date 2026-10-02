@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind reference;
+@reference "tailwindcss";
+
+@import "./cursor.scss";
+
+@layer base {
+  :root {
+    --color-text: #7aa9cc;                   /* azul claro legible sobre --color-bg (~5.4:1) */
+    --color-text-muted: #475569;          /* dark.600 */
+    /*--color-bg: #f8fafc;                  /* light.100 */
+    --color-bg: #003153;                  /* light.100 */
+    --color-primary: #0284c7;             /* primary.600 */
+    --color-primary-hover: #0369a1;       /* primary.700 */
+    --color-border: #cbd5e1;              /* light.400 */
+    --color-primary-rgb: 56, 189, 248;    /* primary.400 */
+
+    /* Constantes independientes del tema */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-foreground: #f4f4f4;
+    --color-surface: #111111;
+    --color-surface-raised: #292929;
+    --color-surface-muted: #333333;
+    --color-input: #2a2a2a;
+    --color-accent: #ff4081;
+    --color-gray: #808080;
+    --color-gray-200: #e5e7eb;
+  }
+
+  .dark {
+    --color-text: #f8fafc;                /* light.100 */
+    --color-text-muted: #e2e8f0;          /* light.300 */
+    --color-bg: #0f172a;                  /* dark.900 */
+    --color-primary: #38bdf8;             /* primary.400 */
+    --color-primary-hover: #7dd3fc;       /* primary.300 */
+    --color-border: #475569;              /* dark.600 */
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition: color 0.2s ease, background-color 0.2s ease;
+    font-family: theme('fontFamily.sans');
+    font-feature-settings: 'ss03', 'ss01', 'ss02', 'ss04', 'ss05', 'ss06', 'ss07', 'ss08';
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold leading-tight tracking-tight;
+  }
+
+  h1 { @apply text-4xl md:text-5xl; }
+  h2 { @apply text-3xl md:text-4xl; }
+  h3 { @apply text-2xl md:text-3xl; }
+  h4 { @apply text-xl md:text-2xl; }
+  h5 { @apply text-lg md:text-xl; }
+  h6 { @apply text-base md:text-lg; }
+
+  a {
+    color: var(--color-primary);
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--color-primary-hover);
+  }
+
+  /* Ajustes para .prose si usas @tailwindcss/typography */
+  .prose {
+    @apply max-w-none;
+  }
+
+  .prose :where(h1, h2, h3, h4, h5, h6):not(:where([class~='not-prose'] *)) {
+    @apply mt-8 mb-4;
+  }
+
+  .prose :where(p):not(:where([class~='not-prose'] *)) {
+    @apply my-4;
+  }
+
+  .prose :where(ul, ol):not(:where([class~='not-prose'] *)) {
+    @apply my-4 pl-6;
+  }
+
+  .prose :where(li):not(:where([class~='not-prose'] *)) {
+    @apply my-2;
+  }
+
+  .prose :where(a):not(:where([class~='not-prose'] *)) {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+    text-decoration-color: rgba(var(--color-primary-rgb), 0.3);
+    transition: color 0.2s ease, text-decoration-color 0.2s ease;
+  }
+
+  .prose :where(a:hover):not(:where([class~='not-prose'] *)) {
+    color: var(--color-primary-hover);
+    text-decoration-color: rgba(var(--color-primary-rgb), 0.6);
+  }
+}

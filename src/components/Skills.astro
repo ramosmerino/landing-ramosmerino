@@ -1,0 +1,158 @@
+---
+const skillCategories = [
+  {
+    name: 'Lenguajes de Programación',
+    icon: 'M10 20l4-16 4 2-4 2-4-2-4 3-2-1 6-9m-7 9v8h2v-6.24l7-2.7 7 5.88-1.5 1.5L17 15.5V28h6v-8h-2v6H5v-8H3z',
+    skills: [
+      { name: 'JavaScript (ES6+)', level: 95 },
+      { name: 'TypeScript', level: 90 },
+      { name: 'Python', level: 85 },
+      { name: 'Dart', level: 80 },
+      { name: 'PHP', level: 75 }
+    ]
+  },
+  {
+    name: 'Frontend',
+    icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z',
+    skills: [
+      { name: 'React', level: 90 },
+      { name: 'Next.js', level: 85 },
+      { name: 'Vue.js', level: 80 },
+      { name: 'Svelte', level: 75 },
+      { name: 'Tailwind CSS', level: 90 },
+      { name: 'SASS/SCSS', level: 85 }
+    ]
+  },
+  {
+    name: 'Backend',
+    icon: 'M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z',
+    skills: [
+      { name: 'Node.js', level: 95 },
+      { name: 'NestJS', level: 90 },
+      { name: 'Express', level: 85 },
+      { name: 'GraphQL', level: 80 },
+      { name: 'REST APIs', level: 90 },
+      { name: 'Microservicios', level: 85 }
+    ]
+  },
+  {
+    name: 'Bases de Datos',
+    icon: 'M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z',
+    skills: [
+      { name: 'PostgreSQL', level: 85 },
+      { name: 'MongoDB', level: 80 },
+      { name: 'MySQL', level: 75 },
+      { name: 'Redis', level: 70 },
+      { name: 'Firebase', level: 75 }
+    ]
+  },
+  {
+    name: 'DevOps & Cloud',
+    icon: 'M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4 0-2.05 1.53-3.76 3.56-3.97l1.07-.11.5-.95C8.08 7.14 9.94 6 12 6c2.62 0 4.88 1.86 5.39 4.43l.3 1.5 1.53.11c1.56.1 2.78 1.41 2.78 2.96 0 1.65-1.35 3-3 3z',
+    skills: [
+      { name: 'Docker', level: 85 },
+      { name: 'Kubernetes', level: 75 },
+      { name: 'AWS', level: 80 },
+      { name: 'GitHub Actions', level: 85 },
+      { name: 'CI/CD', level: 80 },
+      { name: 'Terraform', level: 70 }
+    ]
+  },
+  {
+    name: 'Otras Habilidades',
+    icon: 'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z',
+    skills: [
+      { name: 'Flutter', level: 75 },
+      { name: 'Arquitectura de Software', level: 90 },
+      { name: 'Testing (Jest, Cypress)', level: 80 },
+      { name: 'Diseño UX/UI', level: 70 },
+      { name: 'Diseño Editorial', level: 65 },
+      { name: 'Inglés Avanzado', level: 90 }
+    ]
+  }
+];
+---
+<section id="skills" class="py-16 z-10 bg-[color-mix(in_srgb,var(--color-black)_50%,transparent)] backdrop-blur-sm">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-center mb-12">
+      <span class="relative inline-block">
+        Habilidades
+      </span>
+    </h2>
+
+<div class="max-w-6xl mx-auto">
+  <div class="text-center mb-12">
+    <p class="text-lg text-text-muted max-w-3xl mx-auto">
+      He desarrollado habilidades en diversas tecnologías a lo largo de mi carrera. Aquí hay un resumen de mis habilidades técnicas y nivel de competencia en cada área.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {skillCategories.map(category => (
+      <div class="bg-bg-secondary rounded-xl border border-border/20 p-6 hover:shadow-lg transition-shadow duration-300">
+        <div class="flex items-center mb-4">
+          <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mr-3">
+            <svg class="w-5 h-5 text-primary" viewBox="0 0 24 24" fill="currentColor">
+              <path d={category.icon} />
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-text">{category.name}</h3>
+        </div>
+        
+        <div class="space-y-4 mt-4">
+          {category.skills.map(skill => (
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="text-sm font-medium text-text-muted">{skill.name}</span>
+                <span class="text-xs text-text-muted/70">{skill.level}%</span>
+              </div>
+              <div class="w-full bg-[var(--color-gray-200)] rounded-full h-2">
+                <div 
+                  class="bg-primary h-2 rounded-full transition-all duration-1000 ease-out"
+                  style={`width: ${skill.level}%`}
+                ></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <!-- Additional Skills -->
+  <div class="mt-12 bg-bg-secondary rounded-xl border border-border/20 p-8">
+    <h3 class="text-xl font-bold mb-6 text-center">Otras Habilidades y Competencias</h3>
+    
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      {[
+        'Git', 'Linux', 'Bash', 'VSCode', 'Figma', 'Adobe XD',
+        'Scrum', 'Agile', 'Jira', 'Trello', 'Notion', 'Slack',
+        'Diseño Responsivo', 'SEO Básico', 'Accesibilidad Web',
+        'Arquitectura Limpia', 'Patrones de Diseño', 'TDD'
+      ].map(skill => (
+        <div class="bg-bg/50 hover:bg-primary/5 border border-border/20 rounded-lg px-3 py-2 text-center transition-colors">
+          <span class="text-sm text-text-muted">{skill}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-border/10">
+      <div class="text-center">
+        <p class="text-text-muted text-sm mb-4">
+          Siempre estoy aprendiendo nuevas tecnologías y mejorando mis habilidades.
+        </p>
+        <button 
+          class="inline-flex items-center text-sm font-medium text-primary hover:text-primary-hover transition-colors"
+          onclick="document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })"
+        >
+          ¿Necesitas algo específico? Contáctame
+          <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
